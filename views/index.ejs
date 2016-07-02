@@ -1,4 +1,99 @@
 <!doctype html>
+<head>
+    <!-- bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+</head>
 <body>
-    <h1>Hello World!</h1>
+    <div class="container">
+        <h1>OAuth2 Client Shell</h1>
+        <p>Get the <code>authorization_code</code>, <code>access_token</code> and <code>refresh_token</code> for any registered OAuth2 client!</p>
+        <hr />
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <a data-toggle="collapse" href="#auth-code-panel-body">Authorization Code</a>
+            </div>
+            <div id="auth-code-panel-body" class="panel-body panel-collapse collapse">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="auth-endpoint" class="control-label">Authorization Endpoint</label>
+                            <input type="text" class="form-control" id="auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="client-id" class="control-label">Client ID</label>
+                            <input type="text" class="form-control" id="client-id" placeholder="812741506391.apps.googleusercontent.com"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="scope" class="control-label">Scope</label>
+                            <input type="text" class="form-control" id="scope" placeholder="profile"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-primary btn-custom">Get Authorization Code</button>
+                        </div>
+                    </div>
+                </form>
+
+                <label>Authorization Code: </label>
+                <blockquote>
+                    <p>4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&</p>
+                </blockquote>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <a data-toggle="collapse" href="#user-tokens-panel-body">Access (and Refresh) Token</a>
+            </div>
+            <div id="user-tokens-panel-body" class="panel-body panel-collapse collapse">
+                <form>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="token-endpoint" class="control-label">Token Endpoint</label>
+                            <input type="text" class="form-control" id="token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="client-id" class="control-label">Client ID</label>
+                            <input type="text" class="form-control" id="client-id" placeholder="812741506391.apps.googleusercontent.com"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="client-secret" class="control-label">Client Secret</label>
+                            <input type="text" class="form-control" id="client-secret" placeholder="abc123"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="auth-code" class="control-label">Authorization Code</label>
+                            <input type="text" class="form-control" id="auth-code" placeholder="4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <button class="btn btn-primary btn-custom">Trade In Authorization Code</button>
+                        </div>
+                    </div>
+                </form>
+
+                <label>Access Token: </label>
+                <blockquote>
+                    <p>1/fFBGRNJru1FQd44AzqT3Zg</p>
+                </blockquote>
+
+                <label>Refresh Token: </label>
+                <blockquote>
+                    <p>1/6BMfW9j53gdGImsiyUH5kU5RsR4zwI9lUVX-tqf8JXQ</p>
+                </blockquote>
+            </div>
+        </div>
+    </div>
 </body>
