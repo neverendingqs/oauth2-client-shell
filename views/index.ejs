@@ -20,31 +20,32 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-auth-endpoint" class="control-label">Authorization Endpoint</label>
-                            <input type="text" class="form-control" id="auth-code-auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth"></input>
+                            <input type="text" class="form-control" id="auth-code-auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth" value="<%= authEndpoint %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com"></input>
+                            <input type="text" class="form-control" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-scope" class="control-label">Scope</label>
-                            <input type="text" class="form-control" id="auth-code-scope" placeholder="profile"></input>
+                            <input type="text" class="form-control" id="auth-code-scope" placeholder="profile" value="<%= scope %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <button type="button" class="btn btn-primary btn-custom" onclick="getAuthCode();">Get Authorization Code</button>
+                            <button type="button" class="btn btn-primary" onclick="getAuthCode();">Get Authorization Code</button>
+                            <button type="button" class="btn btn-default" onclick="resetPage();">Reset</button>
                         </div>
                     </div>
                 </form>
 
                 <label>Authorization Code: </label>
                 <blockquote>
-                    <p><%= auth_code %></p>
+                    <p><%= authCode %></p>
                 </blockquote>
             </div>
         </div>
@@ -63,7 +64,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" id="user-tokens-client-id" placeholder="812741506391.apps.googleusercontent.com"></input>
+                            <input type="text" class="form-control" id="user-tokens-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
                         </div>
                     </div>
                     <div class="row">
@@ -75,7 +76,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-auth-code" class="control-label">Authorization Code</label>
-                            <input type="text" class="form-control" id="user-tokens-auth-code" placeholder="4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&" value="<%= auth_code %>"></input>
+                            <input type="text" class="form-control" id="user-tokens-auth-code" placeholder="4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&" value="<%= authCode %>"></input>
                         </div>
                     </div>
                     <div class="row">

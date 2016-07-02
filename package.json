@@ -1,32 +1,33 @@
 {
-    "name": "oauth2-client-shell",
-    "version": "0.1.0",
-    "description": "OAuth2 client where you provide the client credentials to test the 3-legged authorization flow.",
-    "main": "server.js",
-    "scripts": {
-        "dev": "nodemon server.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/neverendingqs/oauth2-client-shell.git"
-    },
-    "keywords": [
-        "oauth2",
-        "3-legged",
-        "authorization"
-    ],
-    "author": "neverendingqs",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/neverendingqs/oauth2-client-shell/issues"
-    },
-    "homepage": "https://github.com/neverendingqs/oauth2-client-shell#readme",
-    "dependencies": {
-        "ejs": "^2.4.2",
-        "express": "^4.14.0"
-    },
-    "devDependencies": {
-        "nodemon": "^1.9.2"
-    }
+  "name": "oauth2-client-shell",
+  "version": "0.1.0",
+  "description": "OAuth2 client where you provide the client credentials to test the 3-legged authorization flow.",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neverendingqs/oauth2-client-shell.git"
+  },
+  "keywords": [
+    "oauth2",
+    "3-legged",
+    "authorization"
+  ],
+  "author": "neverendingqs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neverendingqs/oauth2-client-shell/issues"
+  },
+  "homepage": "https://github.com/neverendingqs/oauth2-client-shell#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.9.2"
+  }
 }

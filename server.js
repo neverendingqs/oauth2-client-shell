@@ -1,20 +1,45 @@
+var cookieName = "oAuth2ClientShell";
+
 var express = require('express');
-var app = express();
+var cookieParser = require('cookie-parser')
 
 var port = process.env.PORT || 3000;
 
+var app = express();
 app.set('view engine', 'ejs');
+
+app.use(cookieParser())
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
+    var cookie;
+
+    if (req.query.reset === "true") {
+        res.cookie(cookieName, "", { expires: new Date() });
+        cookie = {};
+    } else {
+        cookie = req.cookies[cookieName] || {};
+        cookie.authCode = req.query.code || cookie.authCode;
+    }
+
     var locals = {
-        auth_code: req.query.code
+        authCode: cookie.authCode,
+        authEndpoint: cookie.authEndpoint,
+        clientId: cookie.clientId,
+        scope: cookie.scope
     };
 
     res.render('index', locals);
 });
 
 app.get('/auth', function(req, res) {
+    var cookie = req.cookies[cookieName] || {};
+    cookie.authEndpoint = req.query.auth_endpoint;
+    cookie.clientId = req.query.client_id;
+    cookie.scope = req.query.scope;
+
+    res.cookie(cookieName, cookie);
+
     var authCodeRequest = req.query.auth_endpoint
         + "?response_type=code"
         + "&redirect_uri=" + req.protocol + "://" + req.headers.host + "/"
