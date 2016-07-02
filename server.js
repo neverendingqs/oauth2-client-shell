@@ -4,6 +4,7 @@ var app = express();
 var port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 app.get('/', function(req, res) {
     var locals = {
@@ -16,8 +17,8 @@ app.get('/', function(req, res) {
 app.get('/auth', function(req, res) {
     var authCodeRequest = req.query.auth_endpoint
         + "?response_type=code"
+        + "&redirect_uri=" + req.protocol + "://" + req.headers.host + "/"
         + "&client_id=" + req.query.client_id
-        + "&redirect_uri=" + req.query.redirect_uri
         + "&scope=" + req.query.scope;
 
     res.redirect(authCodeRequest);
