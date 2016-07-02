@@ -43,7 +43,7 @@
 
                 <label>Authorization Code: </label>
                 <blockquote>
-                    <p>4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&</p>
+                    <p><%= auth_code %></p>
                 </blockquote>
             </div>
         </div>
@@ -74,7 +74,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code" class="control-label">Authorization Code</label>
-                            <input type="text" class="form-control" id="auth-code" placeholder="4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&"></input>
+                            <input type="text" class="form-control" id="auth-code" placeholder="4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&" value="<%= auth_code %>"></input>
                         </div>
                     </div>
                     <div class="row">
