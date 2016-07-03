@@ -25,7 +25,8 @@
   "dependencies": {
     "cookie-parser": "^1.4.3",
     "ejs": "^2.4.2",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "superagent": "^2.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.9.2"

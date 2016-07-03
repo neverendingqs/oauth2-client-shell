@@ -58,7 +58,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-token-endpoint" class="control-label">Token Endpoint</label>
-                            <input type="text" class="form-control" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token"></input>
+                            <input type="text" class="form-control" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
                         </div>
                     </div>
                     <div class="row">
@@ -70,30 +70,31 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-client-secret" class="control-label">Client Secret</label>
-                            <input type="text" class="form-control" id="user-tokens-client-secret" placeholder="abc123"></input>
+                            <input type="text" class="form-control" id="user-tokens-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-auth-code" class="control-label">Authorization Code</label>
-                            <input type="text" class="form-control" id="user-tokens-auth-code" placeholder="4/P7q7W91a-oMsCeLvIaQm6bTrgtp7&" value="<%= authCode %>"></input>
+                            <input type="text" class="form-control" id="user-tokens-auth-code" placeholder="Get one by completing the 'Authorization Code' form above." value="<%= authCode %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <button class="btn btn-primary btn-custom">Trade In Authorization Code</button>
+                            <button type="button" class="btn btn-primary" onclick="getTokens();">Trade In Authorization Code</button>
+                            <button type="button" class="btn btn-default" onclick="resetPage();">Reset</button>
                         </div>
                     </div>
                 </form>
 
                 <label>Access Token: </label>
                 <blockquote>
-                    <p>1/fFBGRNJru1FQd44AzqT3Zg</p>
+                    <p><%= accessToken %></p>
                 </blockquote>
 
                 <label>Refresh Token: </label>
                 <blockquote>
-                    <p>1/6BMfW9j53gdGImsiyUH5kU5RsR4zwI9lUVX-tqf8JXQ</p>
+                    <p><%= refreshToken %></p>
                 </blockquote>
             </div>
         </div>
