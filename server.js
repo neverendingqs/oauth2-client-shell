@@ -61,12 +61,12 @@ app.post('/token', function(req, res) {
     var payload = {
         grant_type: "authorization_code",
         redirect_uri: req.protocol + "://" + req.headers.host + "/",
-        client_id: cookie.clientId,
-        client_secret: cookie.clientSecret,
         code: cookie.authCode
     };
 
-    request.post(cookie.tokenEndpoint)
+    request
+        .post(cookie.tokenEndpoint)
+        .auth(cookie.clientId, cookie.clientSecret)
         .type('form')
         .send(payload)
         .end(function(err, postResponse) {
