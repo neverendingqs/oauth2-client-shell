@@ -54,34 +54,34 @@
                 <a data-toggle="collapse" href="#user-tokens-panel-body">Access (and Refresh) Token</a>
             </div>
             <div id="user-tokens-panel-body" class="panel-body panel-collapse collapse in">
-                <form>
+                <form action="token" method="post">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-token-endpoint" class="control-label">Token Endpoint</label>
-                            <input type="text" class="form-control" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
+                            <input type="text" class="form-control" name="token_endpoint" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" id="user-tokens-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
+                            <input type="text" class="form-control" name="client_id" id="user-tokens-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-client-secret" class="control-label">Client Secret</label>
-                            <input type="text" class="form-control" id="user-tokens-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
+                            <input type="text" class="form-control" name="client_secret" id="user-tokens-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-auth-code" class="control-label">Authorization Code</label>
-                            <input type="text" class="form-control" id="user-tokens-auth-code" placeholder="Get one by completing the 'Authorization Code' form above." value="<%= authCode %>"></input>
+                            <input type="text" class="form-control" name="auth_code" id="user-tokens-auth-code" placeholder="Get one by completing the 'Authorization Code' form above." value="<%= authCode %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <button type="button" class="btn btn-primary" onclick="getTokens();">Trade In Authorization Code</button>
+                            <button class="btn btn-primary">Trade In Authorization Code</button>
                             <button type="button" class="btn btn-default" onclick="resetPage();">Reset</button>
                         </div>
                     </div>

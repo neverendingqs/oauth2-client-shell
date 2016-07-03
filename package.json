@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/neverendingqs/oauth2-client-shell#readme",
   "dependencies": {
+    "body-parser": "^1.15.2",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.4.2",
     "express": "^4.14.0",

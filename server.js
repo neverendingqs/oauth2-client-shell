@@ -1,7 +1,8 @@
 var cookieName = "oAuth2ClientShell";
 
 var express = require('express');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 var request = require('superagent');
 
 var views = require('./lib/views');
@@ -16,6 +17,7 @@ var app = express();
 app.set('view engine', 'ejs');
 
 app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
@@ -48,12 +50,12 @@ app.get('/auth', function(req, res) {
     res.redirect(authCodeRequest);
 });
 
-app.get('/token', function(req, res) {
+app.post('/token', function(req, res) {
     var cookie = req.cookies[cookieName] || {};
-    cookie.tokenEndpoint = req.query.token_endpoint;
-    cookie.authCode = req.query.auth_code;
-    cookie.clientId = req.query.client_id;
-    cookie.clientSecret = req.query.client_secret;
+    cookie.tokenEndpoint = req.body.token_endpoint;
+    cookie.authCode = req.body.auth_code;
+    cookie.clientId = req.body.client_id;
+    cookie.clientSecret = req.body.client_secret;
     res.cookie(cookieName, cookie, cookieOptions);
 
     var payload = {
@@ -78,7 +80,7 @@ app.get('/token', function(req, res) {
             cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
             res.cookie(cookieName, cookie, cookieOptions);
 
-            res.render('index', views.index(cookie));
+            res.redirect('/');
         })
 });
 
