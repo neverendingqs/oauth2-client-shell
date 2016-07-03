@@ -4,6 +4,8 @@ var express = require('express');
 var cookieParser = require('cookie-parser')
 var request = require('superagent');
 
+var views = require('./lib/views');
+
 var port = process.env.PORT || 3000;
 var cookieOptions = {
     httpOnly: true,
@@ -27,18 +29,7 @@ app.get('/', function(req, res) {
         cookie.authCode = req.query.code || cookie.authCode;
     }
 
-    var locals = {
-        authCode: cookie.authCode,
-        authEndpoint: cookie.authEndpoint,
-        clientId: cookie.clientId,
-        scope: cookie.scope,
-        tokenEndpoint: cookie.tokenEndpoint,
-        clientSecret: cookie.clientSecret,
-        accessToken: cookie.accessToken,
-        refreshToken: cookie.refreshToken
-    };
-
-    res.render('index', locals);
+    res.render('index', views.index(cookie));
 });
 
 app.get('/auth', function(req, res) {
@@ -87,18 +78,7 @@ app.get('/token', function(req, res) {
             cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
             res.cookie(cookieName, cookie, cookieOptions);
 
-            var locals = {
-                authCode: cookie.authCode,
-                authEndpoint: cookie.authEndpoint,
-                clientId: cookie.clientId,
-                scope: cookie.scope,
-                tokenEndpoint: cookie.tokenEndpoint,
-                clientSecret: cookie.clientSecret,
-                accessToken: cookie.accessToken,
-                refreshToken: cookie.refreshToken
-            };
-
-            res.render('index', locals);
+            res.render('index', views.index(cookie));
         })
 });
 
