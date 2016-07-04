@@ -7,6 +7,7 @@ var request = require('superagent');
 
 var views = require('./lib/views');
 
+var state = "5ca0b32f-388b-4e24-a86c-64fd5b764ba3";
 var port = process.env.PORT || 3000;
 var cookieOptions = {
     httpOnly: true,
@@ -22,17 +23,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    var cookie;
+    var cookie = req.cookies[cookieName] || {};
 
     if (req.query.reset === "true") {
         res.cookie(cookieName, "", { expires: new Date() });
-        cookie = {};
+        res.render('index', views.index({}));
+    } else if (req.query.state && req.query.state !== state) {
+        var error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
+        res.render('index', views.index(cookie, error));
     } else {
-        cookie = req.cookies[cookieName] || {};
         cookie.authCode = req.query.code || cookie.authCode;
+        res.render('index', views.index(cookie, req.query.error));
     }
-
-    res.render('index', views.index(cookie, req.query.error));
 });
 
 app.get('/auth', function(req, res) {
@@ -46,7 +48,8 @@ app.get('/auth', function(req, res) {
         + "?response_type=code"
         + "&redirect_uri=" + req.protocol + "://" + req.headers.host + "/"
         + "&client_id=" + cookie.clientId
-        + "&scope=" + cookie.scope;
+        + "&scope=" + cookie.scope
+        + "&state=" + state;
 
     res.redirect(authCodeRequest);
 });
