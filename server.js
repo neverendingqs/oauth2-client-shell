@@ -32,6 +32,7 @@ app.get('/', function(req, res) {
         cookie.authCode = null;
         cookie.accessToken = null;
         cookie.refreshToken = null;
+        cookie.focus = null;
         res.cookie(cookieName, cookie, cookieOptions);
         res.render('index', views.index(cookie));
     } else if (req.query.state && req.query.state !== state) {
@@ -49,6 +50,7 @@ app.get('/auth', function(req, res) {
     cookie.clientId = req.query.client_id;
     cookie.scope = req.query.scope;
     cookie.customParams = req.query.custom_params;
+    cookie.focus = "user-tokens";
     cookie.authCode = null;
     res.cookie(cookieName, cookie, cookieOptions);
 
@@ -69,6 +71,7 @@ app.post('/token', function(req, res) {
     cookie.authCode = req.body.auth_code;
     cookie.clientId = req.body.client_id;
     cookie.clientSecret = req.body.client_secret;
+    cookie.focus = "refresh-token";
     cookie.accessToken = null;
     cookie.refreshToken = null;
     res.cookie(cookieName, cookie, cookieOptions);
