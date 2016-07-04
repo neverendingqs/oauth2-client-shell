@@ -100,6 +100,41 @@ app.post('/token', function(req, res) {
         })
 });
 
+app.post('/refresh', function(req, res) {
+    var cookie = req.cookies[cookieName] || {};
+    cookie.tokenEndpoint = req.body.token_endpoint;
+    cookie.refreshToken = req.body.refresh_token;
+    cookie.clientId = req.body.client_id;
+    cookie.clientSecret = req.body.client_secret;
+    cookie.accessToken = null;
+    res.cookie(cookieName, cookie, cookieOptions);
+
+    var payload = {
+        grant_type: "refresh_token",
+        redirect_uri: req.protocol + "://" + req.headers.host + "/",
+        refresh_token: cookie.refreshToken
+    };
+
+    request
+        .post(cookie.tokenEndpoint)
+        .auth(cookie.clientId, cookie.clientSecret)
+        .type('form')
+        .send(payload)
+        .end(function(err, postResponse) {
+            if (err) {
+                console.log("Error trading in refresh token:")
+                console.log(err);
+                res.redirect('/?error=' + JSON.stringify(postResponse.body));
+            } else {
+                cookie.accessToken = postResponse.body.access_token;
+                cookie.refreshToken = postResponse.body.refresh_token || cookie.refreshToken;
+                res.cookie(cookieName, cookie, cookieOptions);
+
+                res.redirect('/');
+            }
+        })
+});
+
 app.listen(port);
 console.log(`Started on port ${port}.`);
 console.log(`Running with cookieOptions.secure == ${cookieOptions.secure}.`);
