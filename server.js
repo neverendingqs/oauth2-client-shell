@@ -42,6 +42,7 @@ app.get('/auth', function(req, res) {
     cookie.authEndpoint = req.query.auth_endpoint;
     cookie.clientId = req.query.client_id;
     cookie.scope = req.query.scope;
+    cookie.authCode = null;
     res.cookie(cookieName, cookie, cookieOptions);
 
     var authCodeRequest = cookie.authEndpoint
@@ -60,6 +61,8 @@ app.post('/token', function(req, res) {
     cookie.authCode = req.body.auth_code;
     cookie.clientId = req.body.client_id;
     cookie.clientSecret = req.body.client_secret;
+    cookie.accessToken = null;
+    cookie.refreshToken = null;
     res.cookie(cookieName, cookie, cookieOptions);
 
     var payload = {
