@@ -27,6 +27,7 @@
             </div>
             <div id="auth-code-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'auth-code'){ %> in<% } %>">
                 <form action="auth" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-auth-endpoint" class="control-label">Authorization Endpoint</label>
@@ -76,6 +77,7 @@
             </div>
             <div id="user-tokens-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'user-tokens'){ %> in<% } %>">
                 <form action="token" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-token-endpoint" class="control-label">Token Endpoint</label>
@@ -124,6 +126,7 @@
             </div>
             <div id="refresh-token-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'refresh-token'){ %> in<% } %>">
                 <form action="refresh" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="refresh-token-token-endpoint" class="control-label">Token Endpoint</label>

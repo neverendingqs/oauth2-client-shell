@@ -3,6 +3,7 @@ var cookieName = "oAuth2ClientShell";
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var csrf  = require('csurf');
 var request = require('superagent');
 
 var views = require('./lib/views');
@@ -18,11 +19,13 @@ var app = express();
 app.set('view engine', 'ejs');
 app.enable('trust proxy');
 
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(csrf({ cookie: true }));
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
+    var csrfToken = req.csrfToken();
     var cookie = req.cookies[cookieName] || {};
 
     if (req.query.reset === "true") {
@@ -34,13 +37,13 @@ app.get('/', function(req, res) {
         cookie.refreshToken = null;
         cookie.focus = null;
         res.cookie(cookieName, cookie, cookieOptions);
-        res.render('index', views.index(cookie));
+        res.render('index', views.index(cookie, csrfToken));
     } else if (req.query.state && req.query.state !== state) {
         var error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
-        res.render('index', views.index(cookie, error));
+        res.render('index', views.index(cookie, csrfToken, error));
     } else {
         cookie.authCode = req.query.code || cookie.authCode;
-        res.render('index', views.index(cookie, req.query.error));
+        res.render('index', views.index(cookie, csrfToken, req.query.error));
     }
 });
 
