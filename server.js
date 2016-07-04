@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
         cookie.authCode = req.query.code || cookie.authCode;
     }
 
-    res.render('index', views.index(cookie));
+    res.render('index', views.index(cookie, req.query.error));
 });
 
 app.get('/auth', function(req, res) {
@@ -74,14 +74,14 @@ app.post('/token', function(req, res) {
             if (err) {
                 console.log("Error trading in authorization code:")
                 console.log(err);
-                // TODO: return with proper error message
+                res.redirect('/?error=' + JSON.stringify(postResponse.body));
+            } else {
+                cookie.accessToken = postResponse.body.access_token;
+                cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
+                res.cookie(cookieName, cookie, cookieOptions);
+
+                res.redirect('/');
             }
-
-            cookie.accessToken = postResponse.body.access_token;
-            cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
-            res.cookie(cookieName, cookie, cookieOptions);
-
-            res.redirect('/');
         })
 });
 

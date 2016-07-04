@@ -11,6 +11,12 @@
         <h1>OAuth2 Client Shell</h1>
         <p>Get the <code>authorization_code</code>, <code>access_token</code> and <code>refresh_token</code> for any registered OAuth2 client!</p>
         <hr />
+        <% if(error){ %>
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <%= error %>
+        </div>
+        <% } %>
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <a data-toggle="collapse" href="#auth-code-panel-body">Authorization Code</a>
