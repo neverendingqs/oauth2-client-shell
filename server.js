@@ -48,6 +48,7 @@ app.get('/auth', function(req, res) {
     cookie.authEndpoint = req.query.auth_endpoint;
     cookie.clientId = req.query.client_id;
     cookie.scope = req.query.scope;
+    cookie.customParams = req.query.custom_params;
     cookie.authCode = null;
     res.cookie(cookieName, cookie, cookieOptions);
 
@@ -56,7 +57,8 @@ app.get('/auth', function(req, res) {
         + "&redirect_uri=" + req.protocol + "://" + req.headers.host + "/"
         + "&client_id=" + cookie.clientId
         + "&scope=" + cookie.scope
-        + "&state=" + state;
+        + "&state=" + state
+        + "&" + cookie.customParams;
 
     res.redirect(authCodeRequest);
 });

@@ -47,6 +47,12 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
+                            <label for="auth-code-custom-params" class="control-label">Form Encoded Custom Parameters (Optional)</label>
+                            <input type="text" class="form-control" id="auth-code-custom-params" placeholder="access_type=online&include_granted_scopes=false" value="<%= customParams %>"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
                             <label for="auth-code-state" class="control-label">State</label>
                             <input type="text" class="form-control" id="auth-code-state" placeholder="profile" value="<%= state %>" disabled></input>
                         </div>
