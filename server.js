@@ -44,12 +44,12 @@ app.get('/', function(req, res) {
     }
 });
 
-app.get('/auth', function(req, res) {
+app.post('/auth', function(req, res) {
     var cookie = req.cookies[cookieName] || {};
-    cookie.authEndpoint = req.query.auth_endpoint;
-    cookie.clientId = req.query.client_id;
-    cookie.scope = req.query.scope;
-    cookie.customParams = req.query.custom_params;
+    cookie.authEndpoint = req.body.auth_endpoint;
+    cookie.clientId = req.body.client_id;
+    cookie.scope = req.body.scope;
+    cookie.customParams = req.body.custom_params;
     cookie.focus = "user-tokens";
     cookie.authCode = null;
     res.cookie(cookieName, cookie, cookieOptions);

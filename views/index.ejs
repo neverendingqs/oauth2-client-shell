@@ -26,29 +26,29 @@
                 <a data-toggle="collapse" href="#auth-code-panel-body">Authorization Code</a>
             </div>
             <div id="auth-code-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'auth-code'){ %> in<% } %>">
-                <form>
+                <form action="auth" method="post">
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-auth-endpoint" class="control-label">Authorization Endpoint</label>
-                            <input type="text" class="form-control" id="auth-code-auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth" value="<%= authEndpoint %>"></input>
+                            <input type="text" class="form-control" name="auth_endpoint" id="auth-code-auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth" value="<%= authEndpoint %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
+                            <input type="text" class="form-control" name="client_id" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-scope" class="control-label">Scope</label>
-                            <input type="text" class="form-control" id="auth-code-scope" placeholder="profile" value="<%= scope %>"></input>
+                            <input type="text" class="form-control" name="scope" id="auth-code-scope" placeholder="profile" value="<%= scope %>"></input>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-custom-params" class="control-label">Form Encoded Custom Parameters (Optional)</label>
-                            <input type="text" class="form-control" id="auth-code-custom-params" placeholder="access_type=online&include_granted_scopes=false" value="<%= customParams %>"></input>
+                            <input type="text" class="form-control" name="custom_params" id="auth-code-custom-params" placeholder="access_type=online&include_granted_scopes=false" value="<%= customParams %>"></input>
                         </div>
                     </div>
                     <div class="row">
@@ -59,7 +59,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <button type="button" class="btn btn-primary" onclick="getAuthCode();">Get Authorization Code</button>
+                            <button class="btn btn-primary"">Get Authorization Code</button>
                         </div>
                     </div>
                 </form>
