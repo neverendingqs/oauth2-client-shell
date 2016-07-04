@@ -78,6 +78,7 @@ app.post('/token', function(req, res) {
             } else {
                 cookie.accessToken = postResponse.body.access_token;
                 cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
+                cookie.authCode = "(Used) " + cookie.authCode
                 res.cookie(cookieName, cookie, cookieOptions);
 
                 res.redirect('/');
