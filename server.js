@@ -41,8 +41,11 @@ app.get('/', function(req, res) {
     } else if (req.query.state && req.query.state !== state) {
         var error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
         res.render('index', views.index(cookie, csrfToken, error));
+    } else if (req.query.code) {
+        cookie.authCode = req.query.code;
+        cookie.focus = "user-tokens";
+        res.render('index', views.index(cookie, csrfToken, req.query.error));
     } else {
-        cookie.authCode = req.query.code || cookie.authCode;
         res.render('index', views.index(cookie, csrfToken, req.query.error));
     }
 });
@@ -53,7 +56,7 @@ app.post('/auth', function(req, res) {
     cookie.clientId = req.body.client_id;
     cookie.scope = req.body.scope;
     cookie.customParams = req.body.custom_params;
-    cookie.focus = "user-tokens";
+    cookie.focus = "auth-code";
     cookie.authCode = null;
     res.cookie(cookieName, cookie, cookieOptions);
 
@@ -74,7 +77,7 @@ app.post('/token', function(req, res) {
     cookie.authCode = req.body.auth_code;
     cookie.clientId = req.body.client_id;
     cookie.clientSecret = req.body.client_secret;
-    cookie.focus = "refresh-token";
+    cookie.focus = "user-tokens";
     cookie.accessToken = null;
     cookie.refreshToken = null;
     res.cookie(cookieName, cookie, cookieOptions);
@@ -99,6 +102,7 @@ app.post('/token', function(req, res) {
                 cookie.accessToken = postResponse.body.access_token;
                 cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
                 cookie.authCode = "(Used) " + cookie.authCode
+                cookie.focus = "refresh-token";
                 res.cookie(cookieName, cookie, cookieOptions);
 
                 res.redirect('/');
@@ -134,6 +138,7 @@ app.post('/refresh', function(req, res) {
             } else {
                 cookie.accessToken = postResponse.body.access_token;
                 cookie.refreshToken = postResponse.body.refresh_token || cookie.refreshToken;
+                cookie.focus = "refresh-token";
                 res.cookie(cookieName, cookie, cookieOptions);
 
                 res.redirect('/');
