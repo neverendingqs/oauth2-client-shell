@@ -10,6 +10,9 @@
     <div class="container">
         <h1>OAuth2 Client Shell</h1>
         <p>Get the <code>authorization_code</code>, <code>access_token</code> and <code>refresh_token</code> for any registered OAuth2 client!</p>
+
+        <p>This site uses cookies to remember fields in-between requests.</p>
+        <button type="button" class="btn btn-danger" onclick="resetPage();">Clear Cookies</button>
         <hr />
         <% if(error){ %>
         <div class="alert alert-danger">
@@ -44,7 +47,6 @@
                     <div class="row">
                         <div class="form-group col-md-12">
                             <button type="button" class="btn btn-primary" onclick="getAuthCode();">Get Authorization Code</button>
-                            <button type="button" class="btn btn-default" onclick="resetPage();">Reset</button>
                         </div>
                     </div>
                 </form>
@@ -88,7 +90,6 @@
                     <div class="row">
                         <div class="form-group col-md-12">
                             <button class="btn btn-primary">Trade In Authorization Code</button>
-                            <button type="button" class="btn btn-default" onclick="resetPage();">Reset</button>
                         </div>
                     </div>
                 </form>
