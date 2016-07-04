@@ -15,6 +15,7 @@ var cookieOptions = {
 
 var app = express();
 app.set('view engine', 'ejs');
+app.enable('trust proxy');
 
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }));
