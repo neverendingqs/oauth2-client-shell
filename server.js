@@ -28,6 +28,12 @@ app.get('/', function(req, res) {
     if (req.query.reset === "true") {
         res.cookie(cookieName, "", { expires: new Date() });
         res.render('index', views.index({}));
+    } else if (req.query.clear === "true") {
+        cookie.authCode = null;
+        cookie.accessToken = null;
+        cookie.refreshToken = null;
+        res.cookie(cookieName, cookie, cookieOptions);
+        res.render('index', views.index(cookie));
     } else if (req.query.state && req.query.state !== state) {
         var error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
         res.render('index', views.index(cookie, error));
