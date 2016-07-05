@@ -65,8 +65,11 @@ app.post('/auth', function(req, res) {
         + "&redirect_uri=" + req.protocol + "://" + req.headers.host + "/"
         + "&client_id=" + cookie.clientId
         + "&scope=" + cookie.scope
-        + "&state=" + state
-        + "&" + cookie.customParams;
+        + "&state=" + state;
+
+    if(cookie.customParams) {
+        authCodeRequest += "&" + cookie.customParams;
+    }
 
     res.redirect(authCodeRequest);
 });
