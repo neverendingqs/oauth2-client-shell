@@ -101,19 +101,19 @@ app.post('/token', function(req, res) {
                 var error = postResponse
                     ? postResponse.body || "Unknown error"
                     : "Unknown error";
-                console.log("Error trading in authorization code:")
+                console.log("Error trading in authorization code:");
                 console.log(err);
                 res.redirect('/?error=' + JSON.stringify(error));
             } else {
                 cookie.accessToken = postResponse.body.access_token;
                 cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
-                cookie.authCode = "(Used) " + cookie.authCode
+                cookie.authCode = "(Used) " + cookie.authCode;
                 cookie.focus = "refresh-token";
                 res.cookie(cookieName, cookie, cookieOptions);
 
                 res.redirect('/');
             }
-        })
+        });
 });
 
 app.post('/refresh', function(req, res) {
@@ -141,7 +141,7 @@ app.post('/refresh', function(req, res) {
                     ? postResponse.body || "Unknown error"
                     : "Unknown error";
             if (err) {
-                console.log("Error trading in refresh token:")
+                console.log("Error trading in refresh token:");
                 console.log(err);
                 res.redirect('/?error=' + JSON.stringify(error));
             } else {
@@ -152,7 +152,7 @@ app.post('/refresh', function(req, res) {
 
                 res.redirect('/');
             }
-        })
+        });
 });
 
 app.listen(port);
