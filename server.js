@@ -95,9 +95,12 @@ app.post('/token', function(req, res) {
         .send(payload)
         .end(function(err, postResponse) {
             if (err) {
+                var error = postResponse
+                    ? postResponse.body || "Unknown error"
+                    : "Unknown error";
                 console.log("Error trading in authorization code:")
                 console.log(err);
-                res.redirect('/?error=' + JSON.stringify(postResponse.body));
+                res.redirect('/?error=' + JSON.stringify(error));
             } else {
                 cookie.accessToken = postResponse.body.access_token;
                 cookie.refreshToken = postResponse.body.refresh_token || "Not provided by token endpoint.";
@@ -131,10 +134,13 @@ app.post('/refresh', function(req, res) {
         .type('form')
         .send(payload)
         .end(function(err, postResponse) {
+            var error = postResponse
+                    ? postResponse.body || "Unknown error"
+                    : "Unknown error";
             if (err) {
                 console.log("Error trading in refresh token:")
                 console.log(err);
-                res.redirect('/?error=' + JSON.stringify(postResponse.body));
+                res.redirect('/?error=' + JSON.stringify(error));
             } else {
                 cookie.accessToken = postResponse.body.access_token;
                 cookie.refreshToken = postResponse.body.refresh_token || cookie.refreshToken;
