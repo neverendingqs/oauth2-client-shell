@@ -36,6 +36,12 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
+                            <label for="redirect-uri" class="control-label">Redirect URI</label>
+                            <input type="text" class="form-control" id="redirect-uri" value="<%= redirectUri %>" disabled></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
                             <label for="auth-code-client-id" class="control-label">Client ID</label>
                             <input type="text" class="form-control" name="client_id" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
                         </div>
@@ -82,6 +88,12 @@
                         <div class="form-group col-lg-12">
                             <label for="user-tokens-token-endpoint" class="control-label">Token Endpoint</label>
                             <input type="text" class="form-control" name="token_endpoint" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="redirect-uri" class="control-label">Redirect URI</label>
+                            <input type="text" class="form-control" id="redirect-uri" value="<%= redirectUri %>" disabled></input>
                         </div>
                     </div>
                     <div class="row">

@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var csrf  = require('csurf');
 var request = require('superagent');
 
+var utility = require('./lib/utility');
 var views = require('./lib/views');
 
 var state = "5ca0b32f-388b-4e24-a86c-64fd5b764ba3";
@@ -25,29 +26,26 @@ app.use(csrf({ cookie: true }));
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    var csrfToken = req.csrfToken();
     var cookie = req.cookies[cookieName] || {};
+    var error;
 
     if (req.query.reset === "true") {
         res.cookie(cookieName, "", { expires: new Date() });
-        res.render('index', views.index({}));
+        cookie = {};
     } else if (req.query.clear === "true") {
         cookie.authCode = null;
         cookie.accessToken = null;
         cookie.refreshToken = null;
         cookie.focus = null;
         res.cookie(cookieName, cookie, cookieOptions);
-        res.render('index', views.index(cookie, csrfToken));
     } else if (req.query.state && req.query.state !== state) {
-        var error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
-        res.render('index', views.index(cookie, csrfToken, error));
+        error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
     } else if (req.query.code) {
         cookie.authCode = req.query.code;
         cookie.focus = "user-tokens";
-        res.render('index', views.index(cookie, csrfToken, req.query.error));
-    } else {
-        res.render('index', views.index(cookie, csrfToken, req.query.error));
     }
+
+    res.render('index', views.index(req, cookie, error));
 });
 
 app.post('/auth', function(req, res) {
@@ -62,7 +60,7 @@ app.post('/auth', function(req, res) {
 
     var authCodeRequest = cookie.authEndpoint
         + "?response_type=code"
-        + "&redirect_uri=" + req.protocol + "://" + req.headers.host + "/"
+        + "&redirect_uri=" + utility.getRedirectUri(req)
         + "&client_id=" + cookie.clientId
         + "&scope=" + cookie.scope
         + "&state=" + state;
@@ -87,7 +85,7 @@ app.post('/token', function(req, res) {
 
     var payload = {
         grant_type: "authorization_code",
-        redirect_uri: req.protocol + "://" + req.headers.host + "/",
+        redirect_uri: utility.getRedirectUri(req),
         code: cookie.authCode
     };
 
