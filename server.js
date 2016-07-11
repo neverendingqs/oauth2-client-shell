@@ -154,5 +154,18 @@ app.post('/refresh', function(req, res) {
 });
 
 app.listen(port);
-console.log(`Started on port ${port}.`);
+console.log(`HTTP started on port ${port}.`);
 console.log(`Running with cookieOptions.secure == ${cookieOptions.secure}.`);
+
+if (process.env.NODE_ENV !== 'production') {
+    var https = require('https');
+    var selfSigned = require('openssl-self-signed-certificate');
+
+    var options = {
+        key: selfSigned.key,
+        cert: selfSigned.cert
+    };
+
+    https.createServer(options, app).listen(port + 1);
+	console.log(`HTTPS started on port ${port + 1} (dev only).`);
+}
