@@ -97,8 +97,8 @@ app.post('/token', function(req, res) {
         .end(function(err, postResponse) {
             if (err) {
                 var error = postResponse
-                    ? postResponse.body || "Unknown error"
-                    : "Unknown error";
+                    ? postResponse.body || err
+                    : err;
                 console.log("Error trading in authorization code:");
                 console.log(err);
                 res.redirect('/?error=' + JSON.stringify(error));
@@ -136,8 +136,8 @@ app.post('/refresh', function(req, res) {
         .send(payload)
         .end(function(err, postResponse) {
             var error = postResponse
-                    ? postResponse.body || "Unknown error"
-                    : "Unknown error";
+                    ? postResponse.body || err
+                    : err;
             if (err) {
                 console.log("Error trading in refresh token:");
                 console.log(err);
