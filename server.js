@@ -125,7 +125,6 @@ app.post('/refresh', function(req, res) {
 
     var payload = {
         grant_type: "refresh_token",
-        redirect_uri: req.protocol + "://" + req.headers.host + "/",
         refresh_token: cookie.refreshToken
     };
 
