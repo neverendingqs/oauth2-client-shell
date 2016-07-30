@@ -1,194 +1,196 @@
 <!doctype html>
-<head>
-    <!-- bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
-    <script src="lib/index.js"></script>
-    <title>OAuth2 Client Shell</title>
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
-</head>
-<body>
-    <a href="https://github.com/neverendingqs/oauth2-client-shell" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
-    <div class="container">
-        <h1>OAuth2 Client Shell</h1>
-        <p>Get the <code>authorization_code</code>, <code>access_token</code> and <code>refresh_token</code> for any registered OAuth2 client!</p>
+<html lang="en">
+    <head>
+        <!-- bootstrap -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-XYCjB+hFAjSbgf9yKUgbysEjaVLOXhCgATTEBpCqT1R3jvG5LGRAK5ZIyRbH5vpX" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+        <script src="lib/index.js"></script>
+        <title>OAuth2 Client Shell</title>
+        <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
+    </head>
+    <body>
+        <a href="https://github.com/neverendingqs/oauth2-client-shell" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+        <div class="container">
+            <h1>OAuth2 Client Shell</h1>
+            <p>Get the <code>authorization_code</code>, <code>access_token</code> and <code>refresh_token</code> for any registered OAuth2 client!</p>
 
-        <p>This site uses cookies. No values are persisted on the server (except potentially in web logs).</p>
-        <button type="button" class="btn btn-default" onclick="clearCodeAndTokens();">Clear Codes / Tokens</button>
-        <button type="button" class="btn btn-danger" onclick="resetPage();">Clear Cookies</button>
-        <hr />
-        <% if(error){ %>
-        <div class="alert alert-danger">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <%= error %>
+            <p>This site uses cookies. No values are persisted on the server (except potentially in web logs).</p>
+            <button type="button" class="btn btn-default" onclick="clearCodeAndTokens();">Clear Codes / Tokens</button>
+            <button type="button" class="btn btn-danger" onclick="resetPage();">Clear Cookies</button>
+            <hr />
+            <% if(error){ %>
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <%= error %>
+            </div>
+            <% } %>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <a data-toggle="collapse" href="#auth-code-panel-body">Authorization Code</a>
+                </div>
+                <div id="auth-code-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'auth-code'){ %> in<% } %>">
+                    <form action="auth" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="auth-code-auth-endpoint" class="control-label">Authorization Endpoint</label>
+                                <input type="text" class="form-control" name="auth_endpoint" id="auth-code-auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth" value="<%= authEndpoint %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="auth-code-redirect-uri" class="control-label">Redirect URI</label>
+                                <input type="text" class="form-control" id="auth-code-redirect-uri" value="<%= redirectUri %>" disabled></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="auth-code-client-id" class="control-label">Client ID</label>
+                                <input type="text" class="form-control" name="client_id" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="auth-code-scope" class="control-label">Scope</label>
+                                <input type="text" class="form-control" name="scope" id="auth-code-scope" placeholder="profile" value="<%= authCodeScope %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="auth-code-custom-params" class="control-label">Form Encoded Custom Parameters (Optional)</label>
+                                <input type="text" class="form-control" name="custom_params" id="auth-code-custom-params" placeholder="access_type=online&include_granted_scopes=false" value="<%= customParams %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="auth-code-state" class="control-label">State</label>
+                                <input type="text" class="form-control" id="auth-code-state" placeholder="profile" value="<%= state %>" disabled></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <button class="btn btn-primary"">Get Authorization Code</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <label>Authorization Code: </label>
+                    <blockquote>
+                        <p><%= authCode %></p>
+                    </blockquote>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <a data-toggle="collapse" href="#user-tokens-panel-body">Access (and Refresh) Token via Authorization Code</a>
+                </div>
+                <div id="user-tokens-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'user-tokens'){ %> in<% } %>">
+                    <form action="token" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="user-tokens-token-endpoint" class="control-label">Token Endpoint</label>
+                                <input type="text" class="form-control" name="token_endpoint" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="user-tokens-redirect-uri" class="control-label">Redirect URI</label>
+                                <input type="text" class="form-control" id="user-tokens-redirect-uri" value="<%= redirectUri %>" disabled></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="user-tokens-client-id" class="control-label">Client ID</label>
+                                <input type="text" class="form-control" name="client_id" id="user-tokens-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="user-tokens-client-secret" class="control-label">Client Secret</label>
+                                <input type="text" class="form-control" name="client_secret" id="user-tokens-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="user-tokens-auth-code" class="control-label">Authorization Code</label>
+                                <input type="text" class="form-control" name="auth_code" id="user-tokens-auth-code" placeholder="Provide one yourself or get one by completing the 'Authorization Code' form above." value="<%= authCode %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <button class="btn btn-primary">Trade In Authorization Code</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <label>Access Token: </label>
+                    <blockquote>
+                        <p><%= accessToken %></p>
+                    </blockquote>
+
+                    <label>Refresh Token: </label>
+                    <blockquote>
+                        <p><%= refreshToken %></p>
+                    </blockquote>
+                </div>
+            </div>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <a data-toggle="collapse" href="#refresh-token-panel-body">Access (and Refresh) Token via Refresh Token</a>
+                </div>
+                <div id="refresh-token-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'refresh-token'){ %> in<% } %>">
+                    <form action="refresh" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="refresh-token-token-endpoint" class="control-label">Token Endpoint</label>
+                                <input type="text" class="form-control" name="token_endpoint" id="refresh-token-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="refresh-token-client-id" class="control-label">Client ID</label>
+                                <input type="text" class="form-control" name="client_id" id="refresh-token-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="refresh-token-client-secret" class="control-label">Client Secret</label>
+                                <input type="text" class="form-control" name="client_secret" id="refresh-token-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="refresh-token-refresh-token" class="control-label">Refresh Token</label>
+                                <input type="text" class="form-control" name="refresh_token" id="refresh-token-refresh-token" placeholder="Provide one yourself or get one by completing the 'Access (and Refresh) Token via Authorization Code' form above." value="<%= refreshToken %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <label for="refresh-token-scope" class="control-label">Scope</label>
+                                <input type="text" class="form-control" name="scope" id="refresh-token-scope" placeholder="profile" value="<%= refreshTokenScope %>"></input>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <button class="btn btn-primary">Trade In Refresh Token</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <label>Access Token: </label>
+                    <blockquote>
+                        <p><%= accessToken %></p>
+                    </blockquote>
+
+                    <label>Refresh Token: </label>
+                    <blockquote>
+                        <p><%= refreshToken %></p>
+                    </blockquote>
+                </div>
+            </div>
         </div>
-        <% } %>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <a data-toggle="collapse" href="#auth-code-panel-body">Authorization Code</a>
-            </div>
-            <div id="auth-code-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'auth-code'){ %> in<% } %>">
-                <form action="auth" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="auth-code-auth-endpoint" class="control-label">Authorization Endpoint</label>
-                            <input type="text" class="form-control" name="auth_endpoint" id="auth-code-auth-endpoint" placeholder="https://accounts.google.com/o/oauth2/v2/auth" value="<%= authEndpoint %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="auth-code-redirect-uri" class="control-label">Redirect URI</label>
-                            <input type="text" class="form-control" id="auth-code-redirect-uri" value="<%= redirectUri %>" disabled></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="auth-code-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" name="client_id" id="auth-code-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="auth-code-scope" class="control-label">Scope</label>
-                            <input type="text" class="form-control" name="scope" id="auth-code-scope" placeholder="profile" value="<%= authCodeScope %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="auth-code-custom-params" class="control-label">Form Encoded Custom Parameters (Optional)</label>
-                            <input type="text" class="form-control" name="custom_params" id="auth-code-custom-params" placeholder="access_type=online&include_granted_scopes=false" value="<%= customParams %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="auth-code-state" class="control-label">State</label>
-                            <input type="text" class="form-control" id="auth-code-state" placeholder="profile" value="<%= state %>" disabled></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <button class="btn btn-primary"">Get Authorization Code</button>
-                        </div>
-                    </div>
-                </form>
-
-                <label>Authorization Code: </label>
-                <blockquote>
-                    <p><%= authCode %></p>
-                </blockquote>
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <a data-toggle="collapse" href="#user-tokens-panel-body">Access (and Refresh) Token via Authorization Code</a>
-            </div>
-            <div id="user-tokens-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'user-tokens'){ %> in<% } %>">
-                <form action="token" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="user-tokens-token-endpoint" class="control-label">Token Endpoint</label>
-                            <input type="text" class="form-control" name="token_endpoint" id="user-tokens-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="user-tokens-redirect-uri" class="control-label">Redirect URI</label>
-                            <input type="text" class="form-control" id="user-tokens-redirect-uri" value="<%= redirectUri %>" disabled></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="user-tokens-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" name="client_id" id="user-tokens-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="user-tokens-client-secret" class="control-label">Client Secret</label>
-                            <input type="text" class="form-control" name="client_secret" id="user-tokens-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="user-tokens-auth-code" class="control-label">Authorization Code</label>
-                            <input type="text" class="form-control" name="auth_code" id="user-tokens-auth-code" placeholder="Provide one yourself or get one by completing the 'Authorization Code' form above." value="<%= authCode %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <button class="btn btn-primary">Trade In Authorization Code</button>
-                        </div>
-                    </div>
-                </form>
-
-                <label>Access Token: </label>
-                <blockquote>
-                    <p><%= accessToken %></p>
-                </blockquote>
-
-                <label>Refresh Token: </label>
-                <blockquote>
-                    <p><%= refreshToken %></p>
-                </blockquote>
-            </div>
-        </div>
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <a data-toggle="collapse" href="#refresh-token-panel-body">Access (and Refresh) Token via Refresh Token</a>
-            </div>
-            <div id="refresh-token-panel-body" class="panel-body panel-collapse collapse<% if(focus === 'refresh-token'){ %> in<% } %>">
-                <form action="refresh" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="refresh-token-token-endpoint" class="control-label">Token Endpoint</label>
-                            <input type="text" class="form-control" name="token_endpoint" id="refresh-token-token-endpoint" placeholder="https://www.googleapis.com/oauth2/v4/token" value="<%= tokenEndpoint %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="refresh-token-client-id" class="control-label">Client ID</label>
-                            <input type="text" class="form-control" name="client_id" id="refresh-token-client-id" placeholder="812741506391.apps.googleusercontent.com" value="<%= clientId %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="refresh-token-client-secret" class="control-label">Client Secret</label>
-                            <input type="text" class="form-control" name="client_secret" id="refresh-token-client-secret" placeholder="abc123" value="<%= clientSecret %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="refresh-token-refresh-token" class="control-label">Refresh Token</label>
-                            <input type="text" class="form-control" name="refresh_token" id="refresh-token-refresh-token" placeholder="Provide one yourself or get one by completing the 'Access (and Refresh) Token via Authorization Code' form above." value="<%= refreshToken %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-lg-12">
-                            <label for="refresh-token-scope" class="control-label">Scope</label>
-                            <input type="text" class="form-control" name="scope" id="refresh-token-scope" placeholder="profile" value="<%= refreshTokenScope %>"></input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <button class="btn btn-primary">Trade In Refresh Token</button>
-                        </div>
-                    </div>
-                </form>
-
-                <label>Access Token: </label>
-                <blockquote>
-                    <p><%= accessToken %></p>
-                </blockquote>
-
-                <label>Refresh Token: </label>
-                <blockquote>
-                    <p><%= refreshToken %></p>
-                </blockquote>
-            </div>
-        </div>
-    </div>
-</body>
+    </body>
+</html>
