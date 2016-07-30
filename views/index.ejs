@@ -52,7 +52,7 @@
                     <div class="row">
                         <div class="form-group col-lg-12">
                             <label for="auth-code-scope" class="control-label">Scope</label>
-                            <input type="text" class="form-control" name="scope" id="auth-code-scope" placeholder="profile" value="<%= scope %>"></input>
+                            <input type="text" class="form-control" name="scope" id="auth-code-scope" placeholder="profile" value="<%= authCodeScope %>"></input>
                         </div>
                     </div>
                     <div class="row">
@@ -162,8 +162,14 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-lg-12">
-                            <label for="refresh-token-auth-code" class="control-label">Refresh Token</label>
+                            <label for="refresh-token-refresh-token" class="control-label">Refresh Token</label>
                             <input type="text" class="form-control" name="refresh_token" id="refresh-token-refresh-token" placeholder="Provide one yourself or get one by completing the 'Access (and Refresh) Token via Authorization Code' form above." value="<%= refreshToken %>"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-lg-12">
+                            <label for="refresh-token-scope" class="control-label">Scope</label>
+                            <input type="text" class="form-control" name="scope" id="refresh-token-scope" placeholder="profile" value="<%= refreshTokenScope %>"></input>
                         </div>
                     </div>
                     <div class="row">

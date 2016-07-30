@@ -52,7 +52,7 @@ app.post('/auth', function(req, res) {
     var cookie = req.cookies[cookieName] || {};
     cookie.authEndpoint = req.body.auth_endpoint;
     cookie.clientId = req.body.client_id;
-    cookie.scope = req.body.scope;
+    cookie.authCodeScope = req.body.scope;
     cookie.customParams = req.body.custom_params;
     cookie.focus = "auth-code";
     cookie.authCode = null;
@@ -62,7 +62,7 @@ app.post('/auth', function(req, res) {
         + "?response_type=code"
         + "&redirect_uri=" + utility.getRedirectUri(req)
         + "&client_id=" + cookie.clientId
-        + "&scope=" + cookie.scope
+        + "&scope=" + cookie.authCodeScope
         + "&state=" + state;
 
     if(cookie.customParams) {
@@ -120,12 +120,14 @@ app.post('/refresh', function(req, res) {
     cookie.refreshToken = req.body.refresh_token;
     cookie.clientId = req.body.client_id;
     cookie.clientSecret = req.body.client_secret;
+    cookie.refreshTokenScope = req.body.scope;
     cookie.accessToken = null;
     res.cookie(cookieName, cookie, cookieOptions);
 
     var payload = {
         grant_type: "refresh_token",
-        refresh_token: cookie.refreshToken
+        refresh_token: cookie.refreshToken,
+        scope: cookie.refreshTokenScope
     };
 
     request
