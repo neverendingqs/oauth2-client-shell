@@ -26,12 +26,12 @@ app.use(csrf({ cookie: true }));
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    var cookie = req.cookies[cookieName] || {};
+    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults;
     var error;
 
     if (req.query.reset === "true") {
         res.cookie(cookieName, "", { expires: new Date() });
-        cookie = {};
+        cookie = utility.cookieFromDefaults;
     } else if (req.query.clear === "true") {
         cookie.authCode = null;
         cookie.accessToken = null;
