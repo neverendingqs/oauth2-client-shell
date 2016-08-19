@@ -9,7 +9,6 @@ var request = require('superagent');
 var utility = require('./lib/utility');
 var views = require('./lib/views');
 
-var state = "5ca0b32f-388b-4e24-a86c-64fd5b764ba3";
 var port = process.env.PORT || 3000;
 var cookieOptions = {
     httpOnly: true,
@@ -38,9 +37,10 @@ app.get('/', function(req, res) {
         cookie.refreshToken = null;
         cookie.focus = null;
         res.cookie(cookieName, cookie, cookieOptions);
-    } else if (req.query.state && req.query.state !== state) {
-        error = `Authorization endpoint sent back the wrong state! Expected '${req.query.state} but got '${state}' from the server.`;
-    } else if (req.query.code) {
+    }  else if (req.query.code) {
+        if (req.query.state !== cookie.state) {
+            error = `Authorization endpoint sent back the wrong state! Expected '${cookie.state} but got '${req.query.state}' from the server.`;
+        }
         cookie.authCode = req.query.code;
         cookie.focus = "user-tokens";
     }
@@ -49,11 +49,12 @@ app.get('/', function(req, res) {
 });
 
 app.post('/auth', function(req, res) {
-    var cookie = req.cookies[cookieName] || {};
+    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults;
     cookie.authEndpoint = req.body.auth_endpoint;
     cookie.clientId = req.body.client_id;
     cookie.authCodeScope = req.body.scope;
     cookie.customParams = req.body.custom_params;
+    cookie.state = req.body.state;
     cookie.focus = "auth-code";
     cookie.authCode = null;
     res.cookie(cookieName, cookie, cookieOptions);
@@ -63,7 +64,7 @@ app.post('/auth', function(req, res) {
         + "&redirect_uri=" + utility.getRedirectUri(req)
         + "&client_id=" + cookie.clientId
         + "&scope=" + cookie.authCodeScope
-        + "&state=" + state;
+        + "&state=" + cookie.state;
 
     if(cookie.customParams) {
         authCodeRequest += "&" + cookie.customParams;
