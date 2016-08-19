@@ -25,27 +25,38 @@ app.use(csrf({ cookie: true }));
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults;
-    var error;
-
+    // Clear Cookies
     if (req.query.reset === "true") {
         res.cookie(cookieName, "", { expires: new Date() });
-        cookie = utility.cookieFromDefaults;
-    } else if (req.query.clear === "true") {
+        res.render('index', views.index(req, utility.cookieFromDefaults));
+        return;
+    }
+
+    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults;
+
+    // Clear Codes / Tokens
+    if (req.query.clear === "true") {
         cookie.authCode = null;
         cookie.accessToken = null;
         cookie.refreshToken = null;
         cookie.focus = null;
         res.cookie(cookieName, cookie, cookieOptions);
-    }  else if (req.query.code) {
+        res.render('index', views.index(req, cookie));
+        return;
+    }
+
+    // Authorization response
+    if (req.query.code) {
         if (req.query.state !== cookie.state) {
             error = `Authorization endpoint sent back the wrong state! Expected '${cookie.state} but got '${req.query.state}' from the server.`;
+            res.render('index', views.index(req, cookie, error));
+            return;
         }
         cookie.authCode = req.query.code;
         cookie.focus = "user-tokens";
     }
 
-    res.render('index', views.index(req, cookie, error));
+    res.render('index', views.index(req, cookie));
 });
 
 app.post('/auth', function(req, res) {
