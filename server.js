@@ -28,11 +28,11 @@ app.get('/', function(req, res) {
     // Clear Cookies
     if (req.query.reset === "true") {
         res.cookie(cookieName, "", { expires: new Date() });
-        res.render('index', views.index(req, utility.cookieFromDefaults));
+        res.render('index', views.index(req, utility.cookieFromDefaults()));
         return;
     }
 
-    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults;
+    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults();
 
     // Clear Codes / Tokens
     if (req.query.clear === "true") {
@@ -60,7 +60,7 @@ app.get('/', function(req, res) {
 });
 
 app.post('/auth', function(req, res) {
-    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults;
+    var cookie = req.cookies[cookieName] || utility.cookieFromDefaults();
     cookie.authEndpoint = req.body.auth_endpoint;
     cookie.clientId = req.body.client_id;
     cookie.authCodeScope = req.body.scope;
