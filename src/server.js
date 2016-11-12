@@ -1,9 +1,10 @@
 var cookieName = "oAuth2ClientShell";
 
 var express = require('express');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var csrf  = require('csurf');
+var path = require('path');
 var request = require('superagent');
 
 var utility = require('./lib/utility');
@@ -17,12 +18,13 @@ var cookieOptions = {
 
 var app = express();
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'));
 app.enable('trust proxy');
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(csrf({ cookie: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, './public')));
 
 app.get('/', function(req, res) {
     // Clear Cookies

@@ -1,7 +1,7 @@
 var https = require('https');
 var selfSigned = require('openssl-self-signed-certificate');
 
-var app = require('./server');
+var app = require('./src/server');
 var port = (process.env.PORT || 3000) + 1;
 
 var options = {

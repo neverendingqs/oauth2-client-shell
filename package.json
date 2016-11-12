@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "grunt",
+    "start": "node src/server.js",
     "test": "grunt test"
   },
   "repository": {
