@@ -5,23 +5,22 @@ const app = require('../../src/server');
 
 describe('GET /', function() {
     it('initial load includes csrf token', function(done) {
-        request(app)
-            .get('/')
-            .expect(200)
-            .expect('set-cookie', /_csrf=.*?/, done);
+        let req = request(app)
+            .get('/');
+
+        setCommonExpectations(req, done);
     });
 
     it('reset parameter resets cookie', function(done) {
         const preExistingCookie = createCookieString({ foo: "bar" });
         const responseCookie = new RegExp(createCookieString() + "; Path=/");
 
-        request(app)
+        let req = request(app)
             .get('/?reset=true')
-            .set('Cookie', preExistingCookie)
-            .expect(200)
-            .expect('set-cookie', responseCookie)
-            .expect('set-cookie', /_csrf=.*?/)
-            .expect('x-frame-options', /^deny$/i, done);
+            .set('Cookie', preExistingCookie);
+
+        setCommonExpectations(req)
+            .expect('set-cookie', responseCookie, done);
     });
 
     it('clear parameter clears certain cookie values', function(done) {
@@ -42,12 +41,12 @@ describe('GET /', function() {
             })
         );
 
-        request(app)
+        let req = request(app)
             .get('/?clear=true')
-            .set('Cookie', preExistingCookie)
-            .expect(200)
-            .expect('set-cookie', responseCookie)
-            .expect('set-cookie', /_csrf=.*?/, done);
+            .set('Cookie', preExistingCookie);
+
+        setCommonExpectations(req)
+            .expect('set-cookie', responseCookie, done);
     });
 
     it('displays an error if the the state doesn\'t match the state in the authorization response', function(done) {
@@ -57,11 +56,11 @@ describe('GET /', function() {
 
         const preExistingCookie = createCookieString({ state: cookieState });
 
-        request(app)
+        let req = request(app)
             .get(`/?code=${authCode}&state=${responseState}`)
-            .set('Cookie', preExistingCookie)
-            .expect(200)
-            .expect('set-cookie', /_csrf=.*?/)
+            .set('Cookie', preExistingCookie);
+
+        setCommonExpectations(req)
             .end(function(err, res) {
                 if (err) return done(err);
                 assert.include(res.text, 'id="error-message"');
@@ -85,12 +84,12 @@ describe('GET /', function() {
             })
         );
 
-        request(app)
+        let req = request(app)
             .get(`/?code=${authCode}&state=${state}`)
-            .set('Cookie', preExistingCookie)
-            .expect(200)
+            .set('Cookie', preExistingCookie);
+
+        setCommonExpectations(req)
             .expect('set-cookie', responseCookie)
-            .expect('set-cookie', /_csrf=.*?/)
             .end(function(err, res) {
                 if (err) return done(err);
                 assert.notInclude(res.text, 'id="error-message"');
@@ -107,4 +106,20 @@ function createCookieString(cookie) {
             + encodeURIComponent("j:" + JSON.stringify(cookie));
         }
     return "oAuth2ClientShell=";
+}
+
+function setCommonExpectations(req, done) {
+    let r = req
+        .expect(200)
+        .expect('set-cookie', /_csrf=.*?/)
+        .expect('x-frame-options', /^deny$/i);
+
+    if (done) {
+        r.end(function(err, res) {
+            if (err) return done(err);
+            done();
+        });
+    }
+
+    return r;
 }
