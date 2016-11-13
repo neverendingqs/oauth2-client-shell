@@ -17,6 +17,16 @@ module.exports = function(grunt) {
       }
     },
 
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'spec',
+          captureFile: 'mocha.log', // Optionally capture the reporter output to a file
+        },
+        src: ['test/**/*.js']
+      }
+    },
+
     watch: {
       js: {
         files: jsFiles,
@@ -43,8 +53,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-concurrent');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['env:dev', 'jshint', 'concurrent']);
-  grunt.registerTask('test', ['jshint']);
+  grunt.registerTask('test', ['jshint', 'mochaTest']);
 };

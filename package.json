@@ -33,14 +33,18 @@
     "superagent": "^2.0.0"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-jshint": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-env": "^0.4.4",
+    "grunt-mocha-test": "^0.13.2",
     "grunt-nodemon": "^0.4.2",
+    "mocha": "^3.1.2",
     "nodemon": "^1.9.2",
-    "openssl-self-signed-certificate": "^1.0.0"
+    "openssl-self-signed-certificate": "^1.0.0",
+    "supertest": "^2.0.1"
   }
 }
