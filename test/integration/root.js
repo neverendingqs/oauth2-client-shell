@@ -1,10 +1,10 @@
-var assert = require('chai').assert;
-var request = require('supertest');
+const assert = require('chai').assert;
+const request = require('supertest');
 
-var app = require('../../src/server');
+const app = require('../../src/server');
 
 describe('GET /', function() {
-    it('initial load', function(done) {
+    it('initial load includes csrf token', function(done) {
         request(app)
             .get('/')
             .expect(200)
@@ -12,8 +12,8 @@ describe('GET /', function() {
     });
 
     it('reset parameter resets cookie', function(done) {
-        var preExistingCookie = createCookieString({foo: "bar"});
-        var responseCookie = new RegExp(createCookieString() + "; Path=/");
+        const preExistingCookie = createCookieString({ foo: "bar" });
+        const responseCookie = new RegExp(createCookieString() + "; Path=/");
 
         request(app)
             .get('/?reset=true')
@@ -23,14 +23,14 @@ describe('GET /', function() {
     });
 
     it('clear parameter clears certain cookie values', function(done) {
-        var preExistingCookie = createCookieString({
+        const preExistingCookie = createCookieString({
             authCode: "authCode",
             authEndpoint: "authEndpoint",
             accessToken: "accessToken",
             refreshToken: "refreshToken",
             focus: "focus"
         });
-        var responseCookie = new RegExp(
+        const responseCookie = new RegExp(
             createCookieString({
                 authCode: null,
                 authEndpoint: "authEndpoint",
@@ -46,6 +46,43 @@ describe('GET /', function() {
             .set('Cookie', preExistingCookie)
             .expect(200)
             .expect('set-cookie', responseCookie, done);
+    });
+
+    it('displays an error if the the state doesn\'t match the state in the authorization response', function(done) {
+        const cookieState = 'cookieState_e578ec8c-561e-49ee-8a92-0f369006b001';
+        const responseState = 'responseState_960b7de7-19e5-44f0-8b8d-dba65e26e186';
+        const authCode = 'authCode_6f9b363c-1f52-4d4e-90aa-9ca99a546641';
+
+        const preExistingCookie = createCookieString({ state: cookieState });
+
+        request(app)
+            .get(`/?code=${authCode}&state=${responseState}`)
+            .set('Cookie', preExistingCookie)
+            .expect(200)
+            .end(function(err, res) {
+                assert.include(res.text, 'id="error-message"');
+                assert.include(res.text, cookieState);
+                assert.include(res.text, responseState);
+                assert.notInclude(res.text, authCode);
+                done();
+            });
+    });
+
+    it('handles valid authorization response properly', function(done) {
+        const state = 'state_262f09a9-759e-4af4-8597-b9063ed501d9';
+        const authCode = 'authCode_b856d2f1-f442-446a-b7db-07a5f1dc20df';
+
+        const preExistingCookie = createCookieString({ state: state });
+
+        request(app)
+            .get(`/?code=${authCode}&state=${state}`)
+            .set('Cookie', preExistingCookie)
+            .expect(200)
+            .end(function(err, res) {
+                assert.notInclude(res.text, 'id="error-message"');
+                assert.include(res.text, authCode);
+                done();
+            });
     });
 });
 

@@ -20,7 +20,7 @@
             <button type="button" class="btn btn-danger" onclick="resetPage();">Clear Cookies</button>
             <hr />
             <% if(error){ %>
-            <div class="alert alert-danger">
+            <div id="error-message" class="alert alert-danger">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <%= error %>
             </div>
