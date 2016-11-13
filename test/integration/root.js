@@ -2,6 +2,7 @@ var assert = require('chai').assert;
 var request = require('supertest');
 
 var app = require('../../src/server');
+var JSONCookie = require('cookie-parser').JSONCookie;
 
 describe('GET /', function() {
     it('initial load', function(done) {
@@ -21,9 +22,39 @@ describe('GET /', function() {
             .expect(200)
             .expect('set-cookie', responseCookie, done);
     });
+
+    it('clear parameter clears certain cookie values', function(done) {
+        var preExistingCookie = createCookieString({
+            authCode: "authCode",
+            authEndpoint: "authEndpoint",
+            accessToken: "accessToken",
+            refreshToken: "refreshToken",
+            focus: "focus"
+        });
+        var responseCookie = new RegExp(
+            createCookieString({
+                authCode: null,
+                authEndpoint: "authEndpoint",
+                accessToken: null,
+                refreshToken: null,
+                focus: null
+            })
+            + "; Path=/"
+        );
+
+        request(app)
+            .get('/?clear=true')
+            .set('Cookie', preExistingCookie)
+            .expect(200)
+            .expect('set-cookie', responseCookie, done);
+    });
 });
 
 function createCookieString(cookie) {
-    if(cookie) { return "oAuth2ClientShell=" + JSON.stringify(cookie); }
+    if(cookie) {
+        return "oAuth2ClientShell="
+            // https://github.com/expressjs/express/issues/2815
+            + encodeURIComponent("j:" + JSON.stringify(cookie));
+        }
     return "oAuth2ClientShell=";
 }
