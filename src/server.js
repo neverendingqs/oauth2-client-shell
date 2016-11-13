@@ -59,6 +59,7 @@ app.get('/', function(req, res) {
         }
         cookie.authCode = req.query.code;
         cookie.focus = "user-tokens";
+        res.cookie(cookieName, cookie, cookieOptions);
     }
 
     res.render('index', views.index(req, cookie));

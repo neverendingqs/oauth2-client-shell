@@ -8,7 +8,7 @@ describe('GET /', function() {
         request(app)
             .get('/')
             .expect(200)
-            .expect('set-cookie', /_csrf=.*?; Path=\//, done);
+            .expect('set-cookie', /_csrf=.*?/, done);
     });
 
     it('reset parameter resets cookie', function(done) {
@@ -20,6 +20,7 @@ describe('GET /', function() {
             .set('Cookie', preExistingCookie)
             .expect(200)
             .expect('set-cookie', responseCookie)
+            .expect('set-cookie', /_csrf=.*?/)
             .expect('x-frame-options', /^deny$/i, done);
     });
 
@@ -39,14 +40,14 @@ describe('GET /', function() {
                 refreshToken: null,
                 focus: null
             })
-            + "; Path=/"
         );
 
         request(app)
             .get('/?clear=true')
             .set('Cookie', preExistingCookie)
             .expect(200)
-            .expect('set-cookie', responseCookie, done);
+            .expect('set-cookie', responseCookie)
+            .expect('set-cookie', /_csrf=.*?/, done);
     });
 
     it('displays an error if the the state doesn\'t match the state in the authorization response', function(done) {
@@ -60,7 +61,9 @@ describe('GET /', function() {
             .get(`/?code=${authCode}&state=${responseState}`)
             .set('Cookie', preExistingCookie)
             .expect(200)
+            .expect('set-cookie', /_csrf=.*?/)
             .end(function(err, res) {
+                if (err) return done(err);
                 assert.include(res.text, 'id="error-message"');
                 assert.include(res.text, cookieState);
                 assert.include(res.text, responseState);
@@ -74,12 +77,22 @@ describe('GET /', function() {
         const authCode = 'authCode_b856d2f1-f442-446a-b7db-07a5f1dc20df';
 
         const preExistingCookie = createCookieString({ state: state });
+        const responseCookie = new RegExp(
+            createCookieString({
+                state: state,
+                authCode: authCode,
+                focus: 'user-tokens'
+            })
+        );
 
         request(app)
             .get(`/?code=${authCode}&state=${state}`)
             .set('Cookie', preExistingCookie)
             .expect(200)
+            .expect('set-cookie', responseCookie)
+            .expect('set-cookie', /_csrf=.*?/)
             .end(function(err, res) {
+                if (err) return done(err);
                 assert.notInclude(res.text, 'id="error-message"');
                 assert.include(res.text, authCode);
                 done();
