@@ -46,6 +46,7 @@ describe('GET /', function() {
             .set('Cookie', preExistingCookie);
 
         setCommonExpectations(req)
+            .expect('set-cookie', /httponly/i)
             .expect('set-cookie', responseCookie, done);
     });
 
@@ -89,6 +90,7 @@ describe('GET /', function() {
             .set('Cookie', preExistingCookie);
 
         setCommonExpectations(req)
+            .expect('set-cookie', /httponly/i)
             .expect('set-cookie', responseCookie)
             .end(function(err, res) {
                 if (err) return done(err);
