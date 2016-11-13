@@ -4,6 +4,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var csrf  = require('csurf');
+var xFrameOptions = require('x-frame-options');
+
 var path = require('path');
 var request = require('superagent');
 
@@ -24,6 +26,7 @@ app.enable('trust proxy');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(csrf({ cookie: true }));
+app.use(xFrameOptions());
 app.use(express.static(path.join(__dirname, './public')));
 
 app.get('/', function(req, res) {

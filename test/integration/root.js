@@ -19,7 +19,8 @@ describe('GET /', function() {
             .get('/?reset=true')
             .set('Cookie', preExistingCookie)
             .expect(200)
-            .expect('set-cookie', responseCookie, done);
+            .expect('set-cookie', responseCookie)
+            .expect('x-frame-options', /^deny$/i, done);
     });
 
     it('clear parameter clears certain cookie values', function(done) {
