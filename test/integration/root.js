@@ -2,7 +2,6 @@ var assert = require('chai').assert;
 var request = require('supertest');
 
 var app = require('../../src/server');
-var JSONCookie = require('cookie-parser').JSONCookie;
 
 describe('GET /', function() {
     it('initial load', function(done) {
