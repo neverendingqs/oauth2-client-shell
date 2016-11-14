@@ -3,6 +3,8 @@ const request = require('supertest');
 
 const app = require('../../src/server');
 
+const createCookieString = require('../utils').createCookieString;
+
 describe('GET /', function() {
     it('initial load includes csrf token', function(done) {
         let req = request(app)
@@ -100,15 +102,6 @@ describe('GET /', function() {
             });
     });
 });
-
-function createCookieString(cookie) {
-    if(cookie) {
-        return "oAuth2ClientShell="
-            // https://github.com/expressjs/express/issues/2815
-            + encodeURIComponent("j:" + JSON.stringify(cookie));
-        }
-    return "oAuth2ClientShell=";
-}
 
 function setCommonExpectations(req, done) {
     let r = req
