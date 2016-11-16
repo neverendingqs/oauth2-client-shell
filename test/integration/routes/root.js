@@ -1,9 +1,9 @@
 const assert = require('chai').assert;
 const request = require('supertest');
 
-const app = require('../../src/server');
+const app = require('../../../src/server');
 
-const createCookieString = require('../utils').createCookieString;
+const createCookieString = require('../../utils').createCookieString;
 
 describe('GET /', function() {
     it('initial load includes csrf token', function(done) {
