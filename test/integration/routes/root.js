@@ -1,19 +1,19 @@
 const assert = require('chai').assert;
-const request = require('supertest');
+const request = require('supertest-as-promised');
 
 const app = require('../../../src/server');
 
 const createCookieString = require('../../utils').createCookieString;
 
 describe('GET /', function() {
-    it('initial load includes csrf token', function(done) {
+    it('initial load includes csrf token', function() {
         let req = request(app)
             .get('/');
 
-        setCommonExpectations(req, done);
+        return setCommonExpectations(req);
     });
 
-    it('reset parameter resets cookie', function(done) {
+    it('reset parameter resets cookie', function() {
         const preExistingCookie = createCookieString({ foo: "bar" });
         const responseCookie = new RegExp(createCookieString() + "; Path=/");
 
@@ -21,11 +21,11 @@ describe('GET /', function() {
             .get('/?reset=true')
             .set('Cookie', preExistingCookie);
 
-        setCommonExpectations(req)
-            .expect('set-cookie', responseCookie, done);
+        return setCommonExpectations(req)
+            .expect('set-cookie', responseCookie);
     });
 
-    it('clear parameter clears certain cookie values', function(done) {
+    it('clear parameter clears certain cookie values', function() {
         const preExistingCookie = createCookieString({
             authCode: "authCode",
             authEndpoint: "authEndpoint",
@@ -47,12 +47,12 @@ describe('GET /', function() {
             .get('/?clear=true')
             .set('Cookie', preExistingCookie);
 
-        setCommonExpectations(req)
+        return setCommonExpectations(req)
             .expect('set-cookie', /httponly/i)
-            .expect('set-cookie', responseCookie, done);
+            .expect('set-cookie', responseCookie);
     });
 
-    it('displays an error if the the state doesn\'t match the state in the authorization response', function(done) {
+    it('displays an error if the the state doesn\'t match the state in the authorization response', function() {
         const cookieState = 'cookieState_e578ec8c-561e-49ee-8a92-0f369006b001';
         const responseState = 'responseState_960b7de7-19e5-44f0-8b8d-dba65e26e186';
         const authCode = 'authCode_6f9b363c-1f52-4d4e-90aa-9ca99a546641';
@@ -63,18 +63,16 @@ describe('GET /', function() {
             .get(`/?code=${authCode}&state=${responseState}`)
             .set('Cookie', preExistingCookie);
 
-        setCommonExpectations(req)
-            .end(function(err, res) {
-                if (err) return done(err);
+        return setCommonExpectations(req)
+            .then(function(res) {
                 assert.include(res.text, 'id="error-message"');
                 assert.include(res.text, cookieState);
                 assert.include(res.text, responseState);
                 assert.notInclude(res.text, authCode);
-                done();
             });
     });
 
-    it('handles valid authorization response properly', function(done) {
+    it('handles valid authorization response properly', function() {
         const state = 'state_262f09a9-759e-4af4-8597-b9063ed501d9';
         const authCode = 'authCode_b856d2f1-f442-446a-b7db-07a5f1dc20df';
 
@@ -91,30 +89,19 @@ describe('GET /', function() {
             .get(`/?code=${authCode}&state=${state}`)
             .set('Cookie', preExistingCookie);
 
-        setCommonExpectations(req)
+        return setCommonExpectations(req)
             .expect('set-cookie', /httponly/i)
             .expect('set-cookie', responseCookie)
-            .end(function(err, res) {
-                if (err) return done(err);
+            .then(function(res) {
                 assert.notInclude(res.text, 'id="error-message"');
                 assert.include(res.text, authCode);
-                done();
             });
     });
 });
 
-function setCommonExpectations(req, done) {
-    let r = req
+function setCommonExpectations(req) {
+    return req
         .expect(200)
         .expect('set-cookie', /_csrf=.*?/)
         .expect('x-frame-options', /^deny$/i);
-
-    if (done) {
-        r.end(function(err, res) {
-            if (err) return done(err);
-            done();
-        });
-    }
-
-    return r;
 }

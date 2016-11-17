@@ -1,4 +1,4 @@
-const request = require('supertest');
+const request = require('supertest-as-promised');
 
 const app = require('../src/server');
 
@@ -11,21 +11,34 @@ function createCookieString(cookie) {
     return "oAuth2ClientShell=";
 }
 
-function getCsrfTokens(cb) {
-    request(app)
+function getCsrfTokens() {
+    return request(app)
         .get('/')
         .expect('set-cookie', /_csrf=.*?[;,]/)
         .expect(/name="_csrf" value="(.*?)"/)
-        .end(function(err, res) {
-            if (err) return done(err);
-
+        .then(function(res) {
             const cookieCsrf = /_csrf=(.*?);/.exec(res.headers['set-cookie'])[1];
             const formCsrf = /name="_csrf" value="(.*?)"/.exec(res.text)[1];
-            cb(cookieCsrf, formCsrf);
+            return {
+                cookie: cookieCsrf,
+                form: formCsrf
+            };
+        });
+}
+
+function formPostRequestWithCsrf(endpoint, payload) {
+    return getCsrfTokens().then(function(csrf) {
+        payload._csrf = csrf.form;
+        return request(app)
+            .post(endpoint)
+            .set('Cookie', `_csrf=${csrf.cookie}`)
+            .type('form')
+            .send(payload);
     });
 }
 
 module.exports = {
     createCookieString: createCookieString,
-    getCsrfTokens: getCsrfTokens
+    getCsrfTokens: getCsrfTokens,
+    formPostRequestWithCsrf: formPostRequestWithCsrf
 };
