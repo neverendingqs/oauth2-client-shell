@@ -7,14 +7,17 @@ const app = require('../../../src/server');
 const formPostRequestWithCsrf = require('../../utils').formPostRequestWithCsrf;
 
 const authService = 'https://auth_service.local';
-const authorizationEndpoint = '/authorization_endpoint';
-const clientId = 'bfff5722-a0a6-4603-862c-d80cdf9bb50f';
-const clientSecret = '2fb53528-fc34-4499-af8d-8a2dde7c47bb';
-const authCode = 'f86d7d40-84cc-4bc9-9e9b-8b6af2001166';
-const accessToken = 'f3d036a0-962f-4a0f-9535-b75a58e9ff02';
-const refreshToken = '5df64db9-309e-44a1-9387-add3345a0c5b';
+const tokenEndpoint = '/token_endpoint';
+const clientId = 'c10fe586-60d8-436f-b5b4-8bc39732d967';
+const clientSecret = '8d8e5150-e51b-4076-8f1c-6242d095e1ff';
+const requestRefreshToken = 'bc91e930-caa3-4029-bf10-7ccf6a6c1cc8';
+const requestScope = 'c96c9376-0e65-48cd-9872-7c27635b0a27';
 
-describe('POST /token', function() {
+const accessToken = '0515f627-8252-40f9-808a-1c72bbc985d5';
+const responseRefreshToken = '67e04968-6f14-4d75-8837-13d6259e9907';
+const responseScope = '3a598dc6-19ac-4ac7-994b-882b3305676c';
+
+describe('POST /refresh', function() {
     it('error response redirects user to / with error', function() {
         let errBody = { error: 'error_response' };
         getNockWithRequest()
@@ -45,9 +48,9 @@ describe('POST /token', function() {
                     access_token: accessToken,
                     token_type: 'example',
                     expires_in: 3600,
-                    scope: 'scope'
+                    scope: responseScope
                 };
-                if(includeRefreshToken) { tokenResponse.refresh_token = refreshToken; }
+                if(includeRefreshToken) { tokenResponse.refresh_token = responseRefreshToken; }
 
                 getNockWithRequest()
                     .reply(200, tokenResponse);
@@ -58,13 +61,12 @@ describe('POST /token', function() {
 
                     let bodyString = decodeURIComponent(res.header['set-cookie']);
                     assert.include(bodyString, `"accessToken":"${accessToken}"`);
-                    assert.include(bodyString, `"authCode":"(Used) ${authCode}"`);
                     assert.include(bodyString, '"focus":"refresh-token"');
 
                     if(includeRefreshToken) {
-                        assert.include(bodyString, `"refreshToken":"${refreshToken}"`);
+                        assert.include(bodyString, `"refreshToken":"${responseRefreshToken}"`);
                     } else {
-                        assert.include(bodyString, '"refreshToken":"Not provided by token endpoint."');
+                        assert.include(bodyString, `"refreshToken":"${requestRefreshToken}"`);
                     }
                 });
             });
@@ -74,10 +76,10 @@ describe('POST /token', function() {
 
 function getNockWithRequest() {
     return nock(authService)
-        .post(authorizationEndpoint, function(body) {
-            return body.includes('grant_type=authorization_code')
-                && body.includes('redirect_uri=' + encodeURIComponent('http://127.0.0.1'))
-                && body.includes('code=' + authCode);
+        .post(tokenEndpoint, function(body) {
+            return body.includes('grant_type=refresh_token')
+                && body.includes('refresh_token=' + requestRefreshToken)
+                && body.includes('scope=' + requestScope);
         })
         .basicAuth({
             user: clientId,
@@ -86,11 +88,12 @@ function getNockWithRequest() {
 }
 
 function postToEndpoint() {
-    return formPostRequestWithCsrf('/token', {
-        token_endpoint: authService + authorizationEndpoint,
-        auth_code: authCode,
+    return formPostRequestWithCsrf('/refresh', {
+        token_endpoint: authService + tokenEndpoint,
+        refresh_token: requestRefreshToken,
         client_id: clientId,
-        client_secret: clientSecret
+        client_secret: clientSecret,
+        scope: requestScope
     });
 }
 
