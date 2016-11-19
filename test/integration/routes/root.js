@@ -91,6 +91,7 @@ describe('GET /', function() {
 
         return setCommonExpectations(req)
             .expect('set-cookie', /httponly/i)
+            .expect('set-cookie', /secure/i)
             .expect('set-cookie', responseCookie)
             .then(function(res) {
                 assert.notInclude(res.text, 'id="error-message"');

@@ -15,7 +15,7 @@ var views = require('./lib/views');
 var port = process.env.PORT || 3000;
 var cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NO_HTTPS !== '1'
 };
 
 var app = express();
