@@ -1,14 +1,32 @@
 # OAuth2 Client Shell
 
+[![Build Status](https://travis-ci.org/neverendingqs/oauth2-client-shell.svg?branch=master)](https://travis-ci.org/neverendingqs/oauth2-client-shell)
+[![](https://images.microbadger.com/badges/image/neverendingqs/oauth2-client-shell.svg)](https://microbadger.com/images/neverendingqs/oauth2-client-shell "Get your own image badge on microbadger.com")
+
 A client mock where the user provides the information to initiate the [OAuth2 authorization flow](https://tools.ietf.org/html/rfc6749#section-4). Hosted on https://oauth2-client-shell.herokuapp.com/.
 
-This app always assumes it has HTTPS terminated in front of a load balancer, and that it can be trusted (i.e. `app.enable('trust proxy');`)
+This app always assumes it has HTTPS terminated in front of a load balancer, and that it can be trusted (i.e. `app.enable('trust proxy');`).
 
 ## Running
 
-```
+```sh
+npm install
+
+# Running in production and/or without HTTPS
 npm start
+
+# Running it with a self-signed certificate for local use only
+npm run dev
 ```
+
+This app is also available as a [container](https://hub.docker.com/r/neverendingqs/oauth2-client-shell/).
+
+```sh
+# Running it using docker-compose with a self-signed certificate for local use only
+docker-compose up
+```
+
+Navigate to http://localhost:3000 for the HTTP endpoint, and https://localhost:3001 for the HTTPS endpoint.
 
 ### Environment Variables
 
