@@ -13,9 +13,27 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+  deploy:
+    docker:
+      - image: google/cloud-sdk:alpine
+    steps:
+      - checkout
+      - run:
+          name: gcloud auth
+          command: |
+            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud config set project oauth2-client-shell
+      - run: gcloud -q app deploy
 
 workflows:
   version: 2
-  test:
+  test_and_deploy:
     jobs:
       - test
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
