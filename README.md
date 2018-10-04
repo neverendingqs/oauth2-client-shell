@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/neverendingqs/oauth2-client-shell.svg?branch=master)](https://travis-ci.org/neverendingqs/oauth2-client-shell)
 [![](https://images.microbadger.com/badges/image/neverendingqs/oauth2-client-shell.svg)](https://microbadger.com/images/neverendingqs/oauth2-client-shell "Get your own image badge on microbadger.com")
 
-A client mock where the user provides the information to initiate the [OAuth2 authorization flow](https://tools.ietf.org/html/rfc6749#section-4). Hosted on https://oauth2-client-shell.herokuapp.com/.
+A client mock where the user provides the information to initiate the [OAuth2 authorization flow](https://tools.ietf.org/html/rfc6749#section-4). Hosted on https://oauth2-client-shell.neverendingqs.com/.
 
 This app always assumes it has HTTPS terminated in front of a load balancer, and that it can be trusted (i.e. `app.enable('trust proxy');`).
 
