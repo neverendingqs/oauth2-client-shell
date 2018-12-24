@@ -1,23 +1,49 @@
-version: 2
-jobs:
-  test:
+version: 2.1
+
+references:
+  workspace: &workspace
+    /tmp/workspace
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace
+
+executors:
+  node:
     docker:
       - image: circleci/node:8.11.4
+    working_directory: *workspace
+  gcloud:
+    docker:
+      - image: google/cloud-sdk:alpine
+    working_directory: *workspace
+
+jobs:
+  build:
+    executor: node
     steps:
       - checkout
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run: npm install
-      - run: npm test
+      - persist_to_workspace:
+          root: *workspace
+          paths:
+            - "*"
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  deploy:
-    docker:
-      - image: google/cloud-sdk:alpine
+      
+  test:
+    executor: node
     steps:
-      - checkout
+      - *attach_workspace
+      - run: npm test
+
+  deploy:
+    executor: gcloud
+    steps:
+      - *attach_workspace
       - run:
           name: gcloud auth
           command: |
@@ -28,12 +54,16 @@ jobs:
 
 workflows:
   version: 2
-  test_and_deploy:
+  build-test-deploy:
     jobs:
-      - test
+      - build
+      - test:
+          requires:
+            - build
       - deploy:
           requires:
             - test
           filters:
             branches:
-              only: master
+              only:
+                - master
