@@ -1,6 +1,6 @@
 # OAuth2 Client Shell
 
-[![Build Status](https://travis-ci.org/neverendingqs/oauth2-client-shell.svg?branch=master)](https://travis-ci.org/neverendingqs/oauth2-client-shell)
+[![CircleCI](https://circleci.com/gh/neverendingqs/oauth2-client-shell/tree/master.svg?style=svg)](https://circleci.com/gh/neverendingqs/oauth2-client-shell/tree/master)
 [![](https://images.microbadger.com/badges/image/neverendingqs/oauth2-client-shell.svg)](https://microbadger.com/images/neverendingqs/oauth2-client-shell "Get your own image badge on microbadger.com")
 
 A client mock where the user provides the information to initiate the [OAuth2 authorization flow](https://tools.ietf.org/html/rfc6749#section-4). Hosted on https://oauth2-client-shell.neverendingqs.com/.
