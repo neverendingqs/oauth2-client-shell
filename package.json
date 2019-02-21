@@ -44,7 +44,7 @@
     "grunt-mocha-test": "^0.13.2",
     "grunt-nodemon": "^0.4.2",
     "lodash": "^4.16.6",
-    "mocha": "^5.0.0",
+    "mocha": "^6.0.1",
     "nock": "^10.0.0",
     "nodemon": "^1.9.2",
     "openssl-self-signed-certificate": "^1.0.0",
