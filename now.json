@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "oauth2-client-shell",
+  "builds": [
+      { "src": "src/server.js", "use": "@now/node" }
+  ],
+  "routes": [
+      { "src": "/(.*)", "dest": "src/server.js" }
+  ]
+}
