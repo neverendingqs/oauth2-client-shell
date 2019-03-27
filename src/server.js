@@ -87,6 +87,8 @@ app.post('/auth', function(req, res) {
         authCodeRequest += "&" + cookie.customParams;
     }
 
+    console.log(authCodeRequest);
+
     res.redirect(authCodeRequest);
 });
 
@@ -106,6 +108,8 @@ app.post('/token', function(req, res) {
         redirect_uri: utility.getRedirectUri(req),
         code: cookie.authCode
     };
+
+    console.log(cookie.tokenEndpoint);
 
     request
         .post(cookie.tokenEndpoint)
@@ -147,6 +151,8 @@ app.post('/refresh', function(req, res) {
         refresh_token: cookie.refreshToken,
         scope: cookie.refreshTokenScope
     };
+
+    console.log(cookie.tokenEndpoint);
 
     request
         .post(cookie.tokenEndpoint)
