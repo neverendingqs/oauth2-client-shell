@@ -46,7 +46,7 @@
     "lodash": "^4.16.6",
     "mocha": "^5.0.0",
     "nock": "^10.0.0",
-    "nodemon": "^1.9.2",
+    "nodemon": "^1.18.11",
     "openssl-self-signed-certificate": "^1.0.0",
     "supertest": "^3.0.0",
     "supertest-as-promised": "^4.0.2"
