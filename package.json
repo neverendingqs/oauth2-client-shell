@@ -30,7 +30,7 @@
     "csurf": "^1.9.0",
     "ejs": "^2.4.2",
     "express": "^4.14.0",
-    "superagent": "^3.3.1",
+    "superagent": "^5.0.3",
     "x-frame-options": "^1.0.0"
   },
   "devDependencies": {
