@@ -3,7 +3,9 @@
 [![CircleCI](https://circleci.com/gh/neverendingqs/oauth2-client-shell/tree/master.svg?style=svg)](https://circleci.com/gh/neverendingqs/oauth2-client-shell/tree/master)
 [![](https://images.microbadger.com/badges/image/neverendingqs/oauth2-client-shell.svg)](https://microbadger.com/images/neverendingqs/oauth2-client-shell "Get your own image badge on microbadger.com")
 
-A client mock where the user provides the information to initiate the [OAuth2 authorization flow](https://tools.ietf.org/html/rfc6749#section-4). Hosted on https://oauth2-client-shell.neverendingqs.com/.
+_Note: version 2 is available at https://github.com/neverendingqs/oauth2-client-shell-v2_
+
+A client mock where the user provides the information to initiate the [OAuth2 authorization flow](https://tools.ietf.org/html/rfc6749#section-4).
 
 This app always assumes it has HTTPS terminated in front of a load balancer, and that it can be trusted (i.e. `app.enable('trust proxy');`).
 
