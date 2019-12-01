@@ -12,10 +12,6 @@ executors:
     docker:
       - image: circleci/node:10.16.3
     working_directory: *workspace
-  gcloud:
-    docker:
-      - image: google/cloud-sdk:alpine
-    working_directory: *workspace
 
 jobs:
   build:
@@ -40,18 +36,6 @@ jobs:
       - *attach_workspace
       - run: npm test
 
-  deploy:
-    executor: gcloud
-    steps:
-      - *attach_workspace
-      - run:
-          name: gcloud auth
-          command: |
-            echo ${GCLOUD_SERVICE_KEY} > ${HOME}/gcloud-service-key.json
-            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
-            gcloud config set project oauth2-client-shell
-      - run: gcloud -q app deploy
-
 workflows:
   version: 2
   build-test-deploy:
@@ -60,10 +44,3 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
-          requires:
-            - test
-          filters:
-            branches:
-              only:
-                - master
